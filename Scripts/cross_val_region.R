@@ -2,6 +2,9 @@
 # Evaluate whether relationship btwn fire size and spatial metrics
 # varies by region
 
+# Note: User should have version 1.4-0 of quantregGrowth installed
+# to ensure this code runs as intended
+
 # Load packages
 require(tidyverse)
 require(quantreg)
@@ -93,11 +96,11 @@ kfold_val_sum <- list()
 # Area-weighted mean patch size --------
 
 # Mixed severity
-set.seed(956)
+set.seed(956) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_patch_area_AW_mean) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -121,11 +124,11 @@ val_mix_alt_2d <- kfold_2d_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area,
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 # Low severity
-set.seed(6512)
+set.seed(6512) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_patch_area_AW_mean) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -160,11 +163,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Patch size distribution: beta --------
 
 # Mixed severity
-set.seed(123)
+set.seed(123) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(beta) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = beta ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -188,11 +191,11 @@ val_mix_alt_2d <- kfold_2d_fun(form = beta ~ ps(log_fire_area),
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 # Low severity
-set.seed(123)
+set.seed(123) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(beta) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = beta ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -230,11 +233,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Patch size distribution: psi --------
 
 # Mixed severity
-set.seed(123)
+set.seed(123) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(psi) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = psi ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -258,11 +261,11 @@ val_mix_alt_2d <- kfold_2d_fun(form = psi ~ ps(log_fire_area),
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 # Low severity
-set.seed(123)
+set.seed(123) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(psi) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = psi ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -298,11 +301,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Core area --------
 
 # Mixed severity
-set.seed(123)
+set.seed(123) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_total_core) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -326,11 +329,11 @@ val_mix_alt_2d <- kfold_2d_fun(form = log_total_core ~ ps(log_fire_area, monoton
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 # Low severity
-set.seed(1200)
+set.seed(1200) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_total_core) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -364,11 +367,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Seed decay coefficient --------
 
 # Mixed severity
-set.seed(100)
+set.seed(100) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_SDC) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -392,11 +395,11 @@ val_mix_alt_2d <- kfold_2d_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1)
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 # Low severity
-set.seed(100)
+set.seed(100) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_SDC) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
                           tau = taus, data = fire_metrics_low_ss) %>% 

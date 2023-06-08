@@ -2,6 +2,9 @@
 # Evaluate whether relationship btwn fire size and spatial metrics
 # varies by time period
 
+# Note: User should have version 1.4-0 of quantregGrowth installed
+# to ensure this code runs as intended
+
 # Load packages
 require(tidyverse)
 require(quantreg)
@@ -97,11 +100,11 @@ kfold_val_sum <- list()
 # Area-weighted mean patch size --------
 
 # High severity
-set.seed(12)
+set.seed(12) # set seed before subsampling
 
 fire_metrics_high_ss <- fire_metrics_high %>%
   drop_na(log_patch_area_AW_mean) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_high_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1),
                            tau = taus, data = fire_metrics_high_ss) %>% 
@@ -112,12 +115,6 @@ val_high_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, mon
 val_high_add <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1) + ps(Year),
                           tau = taus, data = fire_metrics_high_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "High", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_high_add_lin <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1) + Year_std,
-                              tau = taus, data = fire_metrics_high_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "High", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -137,11 +134,11 @@ val_high_int_2d <- kfold_2d_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area
 
 
 # Mixed severity
-set.seed(34)
+set.seed(34) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_patch_area_AW_mean) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -152,12 +149,6 @@ val_mix_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, mono
 val_mix_add <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1) + ps(Year),
                          tau = taus, data = fire_metrics_mix_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_mix_add_lin <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1) + Year_std,
-                             tau = taus, data = fire_metrics_mix_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -177,11 +168,11 @@ val_mix_int_2d <- kfold_2d_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area,
 
 
 # Low severity
-set.seed(2345)
+set.seed(2345) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_patch_area_AW_mean) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -193,12 +184,6 @@ val_low_add <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monot
                          tau = taus, data = fire_metrics_low_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Low", model = "add") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_low_add_lin <- kfold_fun(form = log_patch_area_AW_mean ~ ps(log_fire_area, monotone = 1) + Year_std,
-                             tau = taus, data = fire_metrics_low_ss) %>%
-  mutate(Region = "Combined", Fire_Regime = "Low", model = "add_lin") %>%
-  group_by(resp, tau, model, Region, Fire_Regime) %>%
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 val_low_int <- kfold_fun(form = log_patch_area_AW_mean ~ Time_Period + 
@@ -228,11 +213,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Patch size distribution: beta --------
 
 # High severity
-set.seed(129)
+set.seed(129) # set seed before subsampling
 
 fire_metrics_high_ss <- fire_metrics_high %>%
   drop_na(beta) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_high_null <- kfold_fun(form = beta ~ ps(log_fire_area),
                            tau = taus, data = fire_metrics_high_ss) %>% 
@@ -243,12 +228,6 @@ val_high_null <- kfold_fun(form = beta ~ ps(log_fire_area),
 val_high_add <- kfold_fun(form = beta ~ ps(log_fire_area) + ps(Year),
                           tau = taus, data = fire_metrics_high_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "High", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_high_add_lin <- kfold_fun(form = beta ~ ps(log_fire_area) + Year_std,
-                              tau = taus, data = fire_metrics_high_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "High", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -268,11 +247,11 @@ val_high_int_2d <- kfold_2d_fun(form = beta ~ ps(log_fire_area), tau = taus,
 
 
 # Mixed severity
-set.seed(951)
+set.seed(951) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(beta) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = beta ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -283,12 +262,6 @@ val_mix_null <- kfold_fun(form = beta ~ ps(log_fire_area),
 val_mix_add <- kfold_fun(form = beta ~ ps(log_fire_area) + ps(Year),
                          tau = taus, data = fire_metrics_mix_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_mix_add_lin <- kfold_fun(form = beta ~ ps(log_fire_area) + Year_std,
-                             tau = taus, data = fire_metrics_mix_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -308,11 +281,11 @@ val_mix_int_2d <- kfold_2d_fun(form = beta ~ ps(log_fire_area), tau = taus,
 
 
 # Low severity
-set.seed(753)
+set.seed(753) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(beta) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = beta ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -324,12 +297,6 @@ val_low_add <- kfold_fun(form = beta ~ ps(log_fire_area) + ps(Year),
                          tau = taus, data = fire_metrics_low_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Low", model = "add") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_low_add_lin <- kfold_fun(form = beta ~ ps(log_fire_area) + Year_std,
-                             tau = taus, data = fire_metrics_low_ss) %>%
-  mutate(Region = "Combined", Fire_Regime = "Low", model = "add_lin") %>%
-  group_by(resp, tau, model, Region, Fire_Regime) %>%
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 val_low_int <- kfold_fun(form = beta ~ Time_Period + 
@@ -359,11 +326,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Patch size distribution: psi --------
 
 # High severity
-set.seed(129)
+set.seed(129) # set seed before subsampling
 
 fire_metrics_high_ss <- fire_metrics_high %>%
   drop_na(psi) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_high_null <- kfold_fun(form = psi ~ ps(log_fire_area),
                            tau = taus, data = fire_metrics_high_ss) %>% 
@@ -374,12 +341,6 @@ val_high_null <- kfold_fun(form = psi ~ ps(log_fire_area),
 val_high_add <- kfold_fun(form = psi ~ ps(log_fire_area) + ps(Year),
                           tau = taus, data = fire_metrics_high_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "High", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_high_add_lin <- kfold_fun(form = psi ~ ps(log_fire_area) + Year_std,
-                              tau = taus, data = fire_metrics_high_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "High", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -399,11 +360,11 @@ val_high_int_2d <- kfold_2d_fun(form = psi ~ ps(log_fire_area), tau = taus,
 
 
 # Mixed severity
-set.seed(951)
+set.seed(951) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(psi) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = psi ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -414,12 +375,6 @@ val_mix_null <- kfold_fun(form = psi ~ ps(log_fire_area),
 val_mix_add <- kfold_fun(form = psi ~ ps(log_fire_area) + ps(Year),
                          tau = taus, data = fire_metrics_mix_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_mix_add_lin <- kfold_fun(form = psi ~ ps(log_fire_area) + Year_std,
-                             tau = taus, data = fire_metrics_mix_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -439,11 +394,11 @@ val_mix_int_2d <- kfold_2d_fun(form = psi ~ ps(log_fire_area), tau = taus,
 
 
 # Low severity
-set.seed(753)
+set.seed(753) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(psi) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = psi ~ ps(log_fire_area),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -455,12 +410,6 @@ val_low_add <- kfold_fun(form = psi ~ ps(log_fire_area) + ps(Year),
                          tau = taus, data = fire_metrics_low_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Low", model = "add") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_low_add_lin <- kfold_fun(form = psi ~ ps(log_fire_area) + Year_std,
-                             tau = taus, data = fire_metrics_low_ss) %>%
-  mutate(Region = "Combined", Fire_Regime = "Low", model = "add_lin") %>%
-  group_by(resp, tau, model, Region, Fire_Regime) %>%
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 val_low_int <- kfold_fun(form = psi ~ Time_Period + 
@@ -491,11 +440,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Core area --------
 
 # High severity
-set.seed(131)
+set.seed(131) # set seed before subsampling
 
 fire_metrics_high_ss <- fire_metrics_high %>%
   drop_na(log_total_core) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_high_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1),
                            tau = taus, data = fire_metrics_high_ss) %>% 
@@ -506,12 +455,6 @@ val_high_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 
 val_high_add <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1) + ps(Year),
                           tau = taus, data = fire_metrics_high_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "High", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_high_add_lin <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1) + Year_std,
-                              tau = taus, data = fire_metrics_high_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "High", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -531,11 +474,11 @@ val_high_int_2d <- kfold_2d_fun(form = log_total_core ~ ps(log_fire_area, monoto
 
 
 # Mixed severity
-set.seed(22)
+set.seed(22) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_total_core) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1),
                            tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -546,12 +489,6 @@ val_mix_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1
 val_mix_add <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1) + ps(Year),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_mix_add_lin <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1) + Year_std,
-                              tau = taus, data = fire_metrics_mix_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -571,11 +508,11 @@ val_mix_int_2d <- kfold_2d_fun(form = log_total_core ~ ps(log_fire_area, monoton
 
 
 # Low severity
-set.seed(129)
+set.seed(129) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_total_core) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -587,12 +524,6 @@ val_low_add <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1)
                          tau = taus, data = fire_metrics_low_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Low", model = "add") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_low_add_lin <- kfold_fun(form = log_total_core ~ ps(log_fire_area, monotone = 1) + Year_std,
-                             tau = taus, data = fire_metrics_low_ss) %>%
-  mutate(Region = "Combined", Fire_Regime = "Low", model = "add_lin") %>%
-  group_by(resp, tau, model, Region, Fire_Regime) %>%
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 val_low_int <- kfold_fun(form = log_total_core ~ Time_Period + 
@@ -622,11 +553,11 @@ kfold_val_sum <- bind_rows(kfold_val_sum,
 # Seed decay coefficient --------
 
 # High severity
-set.seed(129)
+set.seed(129) # set seed before subsampling
 
 fire_metrics_high_ss <- fire_metrics_high %>%
   drop_na(log_SDC) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_high_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
                            tau = taus, data = fire_metrics_high_ss) %>% 
@@ -637,12 +568,6 @@ val_high_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
 val_high_add <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + ps(Year),
                           tau = taus, data = fire_metrics_high_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "High", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_high_add_lin <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + Year_std,
-                              tau = taus, data = fire_metrics_high_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "High", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -662,11 +587,11 @@ val_high_int_2d <- kfold_2d_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1
 
 
 # Mixed severity
-set.seed(951)
+set.seed(951) # set seed before subsampling
 
 fire_metrics_mix_ss <- fire_metrics_mix %>%
   drop_na(log_SDC) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_mix_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
                           tau = taus, data = fire_metrics_mix_ss) %>% 
@@ -677,12 +602,6 @@ val_mix_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
 val_mix_add <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + ps(Year),
                          tau = taus, data = fire_metrics_mix_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add") %>% 
-  group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_mix_add_lin <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + Year_std,
-                             tau = taus, data = fire_metrics_mix_ss) %>% 
-  mutate(Region = "Combined", Fire_Regime = "Mixed", model = "add_lin") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
@@ -702,11 +621,11 @@ val_mix_int_2d <- kfold_2d_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1)
 
 
 # Low severity
-set.seed(753)
+set.seed(753) # set seed before subsampling
 
 fire_metrics_low_ss <- fire_metrics_low %>%
   drop_na(log_SDC) %>% # drop missing response var
-  mutate(subsample = subsample_fn(.))
+  mutate(subsample = subsample_fn(.)) # subsample
 
 val_low_null <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1),
                           tau = taus, data = fire_metrics_low_ss) %>% 
@@ -718,12 +637,6 @@ val_low_add <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + ps(
                          tau = taus, data = fire_metrics_low_ss) %>% 
   mutate(Region = "Combined", Fire_Regime = "Low", model = "add") %>% 
   group_by(resp, tau, model, Region, Fire_Regime) %>% 
-  summarize(total_loss = sum(loss), avg_loss = mean(loss))
-
-val_low_add_lin <- kfold_fun(form = log_SDC ~ ps(log_fire_area, monotone = -1) + Year_std,
-                             tau = taus, data = fire_metrics_low_ss) %>%
-  mutate(Region = "Combined", Fire_Regime = "Low", model = "add_lin") %>%
-  group_by(resp, tau, model, Region, Fire_Regime) %>%
   summarize(total_loss = sum(loss), avg_loss = mean(loss))
 
 val_low_int <- kfold_fun(form = log_SDC ~ Time_Period + 

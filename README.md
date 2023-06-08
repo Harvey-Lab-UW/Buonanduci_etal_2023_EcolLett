@@ -37,6 +37,7 @@ Geospatial data files
 
 R scripts
 
+- install_quantregGrowth.R
 - figure_study_region.R
 - figure_patch_metrics.R
 - figure_scaling.R
@@ -50,6 +51,9 @@ R scripts
 - kfold_fun.R
 - predict.gcrq.inputform.R
 - predict.gcrq.lpmatrix.R
+
+
+**Note**: Version `1.4-0` of the `quantregGrowth` package must be installed by the user to ensure all R scripts run as intended.
 
 
 
@@ -153,6 +157,11 @@ This file contains a classified burn severity raster for the 2019 "Fishhawk" fir
 
 ### WY4437710988020190902_DTS.tif
 This file contains a distance-to-seed raster for the 2019 "Fishhawk" fire in Wyoming (Fire_ID = WY4437710988020190902). Coordinate reference system is NAD83 / Conus Albers (EPSG:5070). The value field is continuous and indicates the distance to potential seed source (m) for each cell that was forested and burned at high severity.
+
+
+
+### install_quantregGrowth.R
+Code for installing the appropriate version of the `quantregGrowth` package. Version `1.4-0` of the `quantregGrowth` package must be installed by the user to ensure all R scripts within this repository run as intended.
 
 
 

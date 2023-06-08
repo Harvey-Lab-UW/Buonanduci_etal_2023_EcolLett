@@ -297,23 +297,17 @@ overflow-y: auto;
 border: 1px solid #ddd;
 border-radius: 4px;
 }
-.tabset-dropdown > .nav-tabs > li.active:before {
-content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+content: "\e259";
 font-family: 'Glyphicons Halflings';
 display: inline-block;
 padding: 10px;
 border-right: 1px solid #ddd;
 }
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-content: "";
-border: none;
-}
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-content: "";
+content: "\e258";
 font-family: 'Glyphicons Halflings';
-display: inline-block;
-padding: 10px;
-border-right: 1px solid #ddd;
+border: none;
 }
 .tabset-dropdown > .nav-tabs > li.active {
 display: block;
@@ -405,6 +399,7 @@ use or misinterpretation of the data.</p>
 </ul>
 <p>R scripts</p>
 <ul>
+<li>install_quantregGrowth.R</li>
 <li>figure_study_region.R</li>
 <li>figure_patch_metrics.R</li>
 <li>figure_scaling.R</li>
@@ -419,6 +414,9 @@ use or misinterpretation of the data.</p>
 <li>predict.gcrq.inputform.R</li>
 <li>predict.gcrq.lpmatrix.R</li>
 </ul>
+<p><strong>Note</strong>: Version <code>1.4-0</code> of the
+<code>quantregGrowth</code> package must be installed by the user to
+ensure all R scripts run as intended.</p>
 <div id="fire_metrics.csv" class="section level3">
 <h3>fire_metrics.csv</h3>
 <p>This file contains high-severity patch size and structure metrics for
@@ -577,6 +575,13 @@ fire in Wyoming (Fire_ID = WY4437710988020190902). Coordinate reference
 system is NAD83 / Conus Albers (EPSG:5070). The value field is
 continuous and indicates the distance to potential seed source (m) for
 each cell that was forested and burned at high severity.</p>
+</div>
+<div id="install_quantreggrowth.r" class="section level3">
+<h3>install_quantregGrowth.R</h3>
+<p>Code for installing the appropriate version of the
+<code>quantregGrowth</code> package. Version <code>1.4-0</code> of the
+<code>quantregGrowth</code> package must be installed by the user to
+ensure all R scripts within this repository run as intended.</p>
 </div>
 <div id="figure_study_region.r" class="section level3">
 <h3>figure_study_region.R</h3>
